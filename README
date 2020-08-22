@@ -1,0 +1,5 @@
+SWIG Based java-Port for CTP
+
+Requisite:
+1) JDK 11.0.5
+2) SWIG 4.0.2
