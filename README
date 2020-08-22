@@ -1,5 +1,58 @@
-SWIG Based java-Port for CTP
+SWIG Based Java-Port for CTP
+============================
 
-Requisite:
-1) JDK 11.0.5
-2) SWIG 4.0.2
+Requisites
+----------
+
+1. JDK 11.0.5
+2. SWIG 4.0.2
+
+Installation notes
+------------------
+
+1. Load library before using the API
+
+It is vitally important to load libraries before access the API. To successfully load libraries, you need
+to put both wrapper DLL that is built by this project and CTP DLL provided by FTDC into the searching
+directories of JVM. JVM searches directories in %PATH% by default, plus JDK home. But if you want to place
+the DLL in another directory, you should let JVM know by add -Djava.library.path=<your-path> as arguments
+to java.exe.
+
+Then in Java codes, you need to add the following 3 lines before using API:
+
+	System.loadLibrary("thostmduserapi_se");
+	System.loadLibrary("thosttraderapi_se");
+	System.loadLibrary("thostctpapi_se-6.3.19-P1");
+   
+2. Diagnose DLL loading problems
+
+Don't use Dependency Walker. On Windows 8+, system separates implementation from facade DLLs, referenced
+via a plain link form the old to the new. The Dependency Walker doesn't know the issue and reports a lot
+of module missing error.
+
+Instead, you could use Process Mongitor by Microsoft as Sysinternals and follow some steps the locate the
+problem:
+
+1) Press `Capture` button, or press Ctrl+E to capture activities across the system.
+2) Run your Java program until error comes out.
+3) Press `Capture` again to stop capturing.
+4) Open filter dialog(Ctrl+L) and add filtering expressions to find your problem. There are some key
+   attribute for you to try:
+   
+   Process name -> is/contains -> java.exe         // Find the java application
+   Result       -> contains    -> NOT              // PATH NOT FOUND or FILE NOT FOUND, JVM tests the
+                                                   // exsistence of DLL by CREATE FILE
+   Operation    -> is          -> Load image       // Check which DLL is loaded
+   
+Respects
+--------
+1. Many thanks to https://github.com/nicai0609 to inspire this project.
+2. Process monitor website: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
+2. World peace!
+
+
+
+Good luck with your trades!
+
+Hongbao Chen
+chenhongbao@outlook.com
