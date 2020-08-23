@@ -87,20 +87,20 @@ public class CThostFtdcMdApi {
     ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterSpi(swigCPtr, this, CThostFtdcMdSpi.getCPtr(pSpi), pSpi);
   }
 
-  public int SubscribeMarketData(SWIGTYPE_p_p_char ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeMarketData(swigCPtr, this, SWIGTYPE_p_p_char.getCPtr(ppInstrumentID), nCount);
+  public int SubscribeMarketData(String[] ppInstrumentID, int nCount) {
+    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
   }
 
-  public int UnSubscribeMarketData(SWIGTYPE_p_p_char ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeMarketData(swigCPtr, this, SWIGTYPE_p_p_char.getCPtr(ppInstrumentID), nCount);
+  public int UnSubscribeMarketData(String[] ppInstrumentID, int nCount) {
+    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
   }
 
-  public int SubscribeForQuoteRsp(SWIGTYPE_p_p_char ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeForQuoteRsp(swigCPtr, this, SWIGTYPE_p_p_char.getCPtr(ppInstrumentID), nCount);
+  public int SubscribeForQuoteRsp(String[] ppInstrumentID, int nCount) {
+    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
   }
 
-  public int UnSubscribeForQuoteRsp(SWIGTYPE_p_p_char ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeForQuoteRsp(swigCPtr, this, SWIGTYPE_p_p_char.getCPtr(ppInstrumentID), nCount);
+  public int UnSubscribeForQuoteRsp(String[] ppInstrumentID, int nCount) {
+    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
   }
 
   public int ReqUserLogin(CThostFtdcReqUserLoginField pReqUserLoginField, int nRequestID) {

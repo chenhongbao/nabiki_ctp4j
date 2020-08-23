@@ -1,1 +1,1 @@
-swig -c++ -java -package com.nabiki.ctp4j -outdir java/com/nabiki/ctp4j -o cpp/ctpapi_all_jni.cpp i/ctpapi_all.i
+swig -c++ -java -package com.nabiki.ctp4j -outdir java -o cpp/ctpapi_all_jni.cpp i/ctpapi_all.i

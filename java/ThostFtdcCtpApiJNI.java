@@ -10120,10 +10120,10 @@ public class ThostFtdcCtpApiJNI {
   public final static native void CThostFtdcMdApi_RegisterNameServer(long jarg1, CThostFtdcMdApi jarg1_, String jarg2);
   public final static native void CThostFtdcMdApi_RegisterFensUserInfo(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, CThostFtdcFensUserInfoField jarg2_);
   public final static native void CThostFtdcMdApi_RegisterSpi(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, CThostFtdcMdSpi jarg2_);
-  public final static native int CThostFtdcMdApi_SubscribeMarketData(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, int jarg3);
-  public final static native int CThostFtdcMdApi_UnSubscribeMarketData(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, int jarg3);
-  public final static native int CThostFtdcMdApi_SubscribeForQuoteRsp(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, int jarg3);
-  public final static native int CThostFtdcMdApi_UnSubscribeForQuoteRsp(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, int jarg3);
+  public final static native int CThostFtdcMdApi_SubscribeMarketData(long jarg1, CThostFtdcMdApi jarg1_, String[] jarg2, int jarg3);
+  public final static native int CThostFtdcMdApi_UnSubscribeMarketData(long jarg1, CThostFtdcMdApi jarg1_, String[] jarg2, int jarg3);
+  public final static native int CThostFtdcMdApi_SubscribeForQuoteRsp(long jarg1, CThostFtdcMdApi jarg1_, String[] jarg2, int jarg3);
+  public final static native int CThostFtdcMdApi_UnSubscribeForQuoteRsp(long jarg1, CThostFtdcMdApi jarg1_, String[] jarg2, int jarg3);
   public final static native int CThostFtdcMdApi_ReqUserLogin(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, CThostFtdcReqUserLoginField jarg2_, int jarg3);
   public final static native int CThostFtdcMdApi_ReqUserLogout(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, CThostFtdcUserLogoutField jarg2_, int jarg3);
   public final static native int CThostFtdcMdApi_ReqQryMulticastInstrument(long jarg1, CThostFtdcMdApi jarg1_, long jarg2, CThostFtdcQryMulticastInstrumentField jarg2_, int jarg3);
