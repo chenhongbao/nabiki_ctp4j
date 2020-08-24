@@ -9,5 +9,5 @@
 package com.nabiki.ctp4j;
 
 public class ThostFtdcCtpApi implements ThostFtdcCtpApiConstants {
-    static Object syncObj = new Object();
+    static final Object syncObj = new Object();
 }

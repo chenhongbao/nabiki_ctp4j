@@ -11,6 +11,7 @@ package com.nabiki.ctp4j;
 public class CThostFtdcTraderApi {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
+  protected CThostFtdcTraderSpi jSpi;
 
   protected CThostFtdcTraderApi(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
@@ -53,6 +54,7 @@ public class CThostFtdcTraderApi {
 
   public void Release() {
     synchronized (ThostFtdcCtpApi.syncObj) {
+	  this.jSpi = null;
 	  ThostFtdcCtpApiJNI.CThostFtdcTraderApi_Release(swigCPtr, this);
 	}
   }
@@ -65,7 +67,7 @@ public class CThostFtdcTraderApi {
 
   public int Join() {
 	synchronized (ThostFtdcCtpApi.syncObj) {
-      return ThostFtdcCtpApiJNI.CThostFtdcTraderApi_Join(swigCPtr, this);
+	  return ThostFtdcCtpApiJNI.CThostFtdcTraderApi_Join(swigCPtr, this);
 	}
   }
 
@@ -95,6 +97,7 @@ public class CThostFtdcTraderApi {
 
   public void RegisterSpi(CThostFtdcTraderSpi pSpi) {
     synchronized (ThostFtdcCtpApi.syncObj) {
+	  this.jSpi = pSpi;
 	  ThostFtdcCtpApiJNI.CThostFtdcTraderApi_RegisterSpi(swigCPtr, this, CThostFtdcTraderSpi.getCPtr(pSpi), pSpi);
 	}
   }
