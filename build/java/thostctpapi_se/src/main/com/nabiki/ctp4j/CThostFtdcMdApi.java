@@ -32,87 +32,127 @@ public class CThostFtdcMdApi {
   }
 
   public static CThostFtdcMdApi CreateFtdcMdApi(String pszFlowPath, boolean bIsUsingUdp, boolean bIsMulticast) {
-    long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_0(pszFlowPath, bIsUsingUdp, bIsMulticast);
-    return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+      long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_0(pszFlowPath, bIsUsingUdp, bIsMulticast);
+      return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+    }
   }
 
   public static CThostFtdcMdApi CreateFtdcMdApi(String pszFlowPath, boolean bIsUsingUdp) {
-    long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_1(pszFlowPath, bIsUsingUdp);
-    return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+	synchronized (ThostFtdcCtpApi.syncObj) {
+      long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_1(pszFlowPath, bIsUsingUdp);
+      return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+	}
   }
 
   public static CThostFtdcMdApi CreateFtdcMdApi(String pszFlowPath) {
-    long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_2(pszFlowPath);
-    return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_2(pszFlowPath);
+      return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+	}
   }
 
   public static CThostFtdcMdApi CreateFtdcMdApi() {
-    long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_3();
-    return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  long cPtr = ThostFtdcCtpApiJNI.CThostFtdcMdApi_CreateFtdcMdApi__SWIG_3();
+      return (cPtr == 0) ? null : new CThostFtdcMdApi(cPtr, false);
+	}
   }
 
   public static String GetApiVersion() {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_GetApiVersion();
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_GetApiVersion();
+	}
   }
 
   public void Release() {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_Release(swigCPtr, this);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_Release(swigCPtr, this);
+	}
   }
 
   public void Init() {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_Init(swigCPtr, this);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_Init(swigCPtr, this);
+	}
   }
 
   public int Join() {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_Join(swigCPtr, this);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_Join(swigCPtr, this);
+	}
   }
 
   public String GetTradingDay() {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_GetTradingDay(swigCPtr, this);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_GetTradingDay(swigCPtr, this);
+	}
   }
 
   public void RegisterFront(String pszFrontAddress) {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterFront(swigCPtr, this, pszFrontAddress);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterFront(swigCPtr, this, pszFrontAddress);
+	}
   }
 
   public void RegisterNameServer(String pszNsAddress) {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterNameServer(swigCPtr, this, pszNsAddress);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterNameServer(swigCPtr, this, pszNsAddress);
+	}
   }
 
   public void RegisterFensUserInfo(CThostFtdcFensUserInfoField pFensUserInfo) {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterFensUserInfo(swigCPtr, this, CThostFtdcFensUserInfoField.getCPtr(pFensUserInfo), pFensUserInfo);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterFensUserInfo(swigCPtr, this, CThostFtdcFensUserInfoField.getCPtr(pFensUserInfo), pFensUserInfo);
+	}
   }
 
   public void RegisterSpi(CThostFtdcMdSpi pSpi) {
-    ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterSpi(swigCPtr, this, CThostFtdcMdSpi.getCPtr(pSpi), pSpi);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  ThostFtdcCtpApiJNI.CThostFtdcMdApi_RegisterSpi(swigCPtr, this, CThostFtdcMdSpi.getCPtr(pSpi), pSpi);
+	}
   }
 
   public int SubscribeMarketData(String[] ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
+	}
   }
 
   public int UnSubscribeMarketData(String[] ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeMarketData(swigCPtr, this, ppInstrumentID, nCount);
+	}
   }
 
   public int SubscribeForQuoteRsp(String[] ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_SubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
+	}
   }
 
   public int UnSubscribeForQuoteRsp(String[] ppInstrumentID, int nCount) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_UnSubscribeForQuoteRsp(swigCPtr, this, ppInstrumentID, nCount);
+	}
   }
 
   public int ReqUserLogin(CThostFtdcReqUserLoginField pReqUserLoginField, int nRequestID) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqUserLogin(swigCPtr, this, CThostFtdcReqUserLoginField.getCPtr(pReqUserLoginField), pReqUserLoginField, nRequestID);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqUserLogin(swigCPtr, this, CThostFtdcReqUserLoginField.getCPtr(pReqUserLoginField), pReqUserLoginField, nRequestID);
+	}
   }
 
   public int ReqUserLogout(CThostFtdcUserLogoutField pUserLogout, int nRequestID) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqUserLogout(swigCPtr, this, CThostFtdcUserLogoutField.getCPtr(pUserLogout), pUserLogout, nRequestID);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqUserLogout(swigCPtr, this, CThostFtdcUserLogoutField.getCPtr(pUserLogout), pUserLogout, nRequestID);
+	}
   }
 
   public int ReqQryMulticastInstrument(CThostFtdcQryMulticastInstrumentField pQryMulticastInstrument, int nRequestID) {
-    return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqQryMulticastInstrument(swigCPtr, this, CThostFtdcQryMulticastInstrumentField.getCPtr(pQryMulticastInstrument), pQryMulticastInstrument, nRequestID);
+    synchronized (ThostFtdcCtpApi.syncObj) {
+	  return ThostFtdcCtpApiJNI.CThostFtdcMdApi_ReqQryMulticastInstrument(swigCPtr, this, CThostFtdcQryMulticastInstrumentField.getCPtr(pQryMulticastInstrument), pQryMulticastInstrument, nRequestID);
+	}
   }
 
 }
