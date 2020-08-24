@@ -44,6 +44,22 @@ problem:
                                                    // exsistence of DLL by CREATE FILE
    Operation    -> is          -> Load image       // Check which DLL is loaded
    
+3. Tackling `null upcall object` exception
+
+It is caused by invalid C++ object(pointer) of Swig::Director, the parent class of your SPI wrapper. This
+is done by JVM automatically after the Java counterpart is no long kept and garbage collected.
+
+So you must keep the reference to your Java SPI instance explicitly, which means you should not code:
+
+	api.RegisterSpi(new MySPI());
+
+Instead, you are encouraged to code:
+
+	this.spi = new MySPI();
+	api.RegisterSpi(this.spi);
+	
+So Java won't garbage collect the Java SPI and its C++ counterpart stays alive.
+   
 Respects
 --------
 1. Many thanks to https://github.com/nicai0609 to inspire this project.
