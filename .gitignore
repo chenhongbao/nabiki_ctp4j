@@ -1,1 +1,13 @@
-/build
+/build/vc/thostctpapi_se/.vs
+/build/vc/thostctpapi_se/x64
+/build/java/thostctpapi_se/.idea
+/build/java/thostctpapi_se/dll
+/build/java/thostctpapi_se/lib
+/build/java/thostctpapi_se/out
+
+
+*.exp
+*.ilk
+*.pdb
+*.iobj
+*.ipdb
