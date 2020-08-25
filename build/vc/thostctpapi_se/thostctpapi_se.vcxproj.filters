@@ -21,7 +21,7 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\cpp\ctpapi_all_jni.h">
+    <ClInclude Include="ctpapi_all_jni.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\cpp\ctpapi_all_jni.cpp">
+    <ClCompile Include="ctpapi_all_jni.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

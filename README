@@ -32,7 +32,8 @@ Build codes with four steps:
    because the codes ready in projects have been modified somehow to avoid JNI problems. Just use the
    codes there to share my works.
    
-   If you want to build C++, everything is ready. Go to directory `./build/vc` and run the solution.
+   If you want to build C++, Move the generated C++ files in `./cpp` to the project directpry under 
+   `./build/vc/` and build the solution.
 
 2. Load library before using the API
 
