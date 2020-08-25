@@ -53,36 +53,39 @@ public class CThostFtdcTraderApiTest {
 
         @Override
         public void OnRspAuthenticate(CThostFtdcRspAuthenticateField pRspAuthenticateField, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
-            if (pRspInfo == null)
-                fail("rsp info null");
-            if (pRspInfo.getErrorID() != 0)
+            if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("authenticate failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
 
         @Override
         public void OnRspUserLogin(CThostFtdcRspUserLoginField pRspUserLogin, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
-            if (pRspInfo == null)
-                fail("rsp info null");
-            if (pRspInfo.getErrorID() != 0)
+            if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
 
         @Override
         public void OnRspUserLogout(CThostFtdcUserLogoutField pUserLogout, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
-            if (pRspInfo == null)
-                fail("rsp info null");
-            if (pRspInfo.getErrorID() != 0)
+            if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
 
         @Override
+        public void OnRspQrySettlementInfo(CThostFtdcSettlementInfoField pSettlementInfo, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
+            if (pRspInfo != null && pRspInfo.getErrorID() != 0)
+                fail("qry settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            else if (pSettlementInfo != null)
+                System.out.print(pSettlementInfo.getContent());
+            else
+                System.out.println("settlement info null");
+            signal();
+        }
+
+        @Override
         public void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField pSettlementInfoConfirm, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
-            if (pRspInfo == null)
-                fail("rsp info null");
-            if (pRspInfo.getErrorID() != 0)
+            if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("confirm settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
@@ -112,6 +115,16 @@ public class CThostFtdcTraderApiTest {
             field.setPassword(this.password);
             field.setUserProductInfo(this.userProductInfo);
             return this.api.ReqUserLogin(field, ++this.requestID);
+        }
+
+        int qry_settlement() {
+            var qry = new CThostFtdcQrySettlementInfoField();
+            qry.setAccountID(this.userID);
+            qry.setInvestorID(this.userID);
+            qry.setBrokerID(this.brokerID);
+            qry.setCurrencyID("CNY");
+            qry.setTradingDay("20200824");
+            return this.api.ReqQrySettlementInfo(qry, ++this.requestID);
         }
 
         int confirm() {
@@ -152,10 +165,20 @@ public class CThostFtdcTraderApiTest {
         }
     }
 
+    private boolean waitMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail("sleep interrupted");
+            return false;
+        }
+    }
 
     @Test
     public void basic() {
-        var api = CThostFtdcTraderApi.CreateFtdcTraderApi(".trader");
+        var api = CThostFtdcTraderApi.CreateFtdcTraderApi(".trade/");
         var spi = new TraderTestSpi(api);
 
         boolean[] released = new boolean[1];
@@ -170,6 +193,8 @@ public class CThostFtdcTraderApiTest {
         if (!spi.waitRsp(1000))
             fail("connect time out");
 
+        waitMillis(30 * 1000);
+
         spi.authenticate();
         if (!spi.waitRsp(1000))
             fail("authenticate time out");
@@ -177,6 +202,10 @@ public class CThostFtdcTraderApiTest {
         spi.login();
         if (!spi.waitRsp(1000))
             fail("login time out");
+
+        spi.qry_settlement();
+        if (!spi.waitRsp(1000))
+            fail("qry settlement time out");
 
         spi.confirm();
         if (!spi.waitRsp(1000))
@@ -194,12 +223,7 @@ public class CThostFtdcTraderApiTest {
         api.Release();
 
         // Wait release.
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            fail("sleep interrupted");
-        }
+        waitMillis(1000);
 
         if (!released[0])
             fail("release time out");
