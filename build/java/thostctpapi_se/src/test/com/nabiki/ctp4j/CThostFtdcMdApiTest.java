@@ -8,8 +8,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.fail;
-
 public class CThostFtdcMdApiTest {
     private static final Logger logger = Logger.getLogger(CThostFtdcTraderApiTest.class.getName());
 
@@ -57,29 +55,31 @@ public class CThostFtdcMdApiTest {
         @Override
         public void OnRspUserLogin(CThostFtdcRspUserLoginField pRspUserLogin, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("login");
             signal();
         }
 
         @Override
         public void OnRspUserLogout(CThostFtdcUserLogoutField pUserLogout, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("logout");
             signal();
         }
 
         @Override
         public void OnRspError(CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo == null)
-                fail("rsp info null");
-            fail("failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("rsp info null");
+            logger.severe("failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
 
         @Override
         public void OnRspSubMarketData(CThostFtdcSpecificInstrumentField pSpecificInstrument, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo.getErrorID() != 0)
-                fail("subscription failed");
+                logger.severe("subscription failed");
             logger.info("sub rsp " + pSpecificInstrument.getInstrumentID());
             signal();
         }
@@ -87,7 +87,7 @@ public class CThostFtdcMdApiTest {
         @Override
         public void OnRspUnSubMarketData(CThostFtdcSpecificInstrumentField pSpecificInstrument, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo.getErrorID() != 0)
-                fail("subscription failed");
+                logger.severe("subscription failed");
             logger.info("un-sub rsp " + pSpecificInstrument.getInstrumentID());
             signal();
         }
@@ -116,13 +116,13 @@ public class CThostFtdcMdApiTest {
         int subscribe(String instrumentID) {
             String[] req = new String[1];
             req[0] = instrumentID;
-            return this.api.SubscribeMarketData(req, ++this.requestID);
+            return this.api.SubscribeMarketData(req, 1);
         }
 
         int unSubscribe(String instrumentID) {
             String[] req = new String[1];
             req[0] = instrumentID;
-            return this.api.UnSubscribeMarketData(req, ++this.requestID);
+            return this.api.UnSubscribeMarketData(req, 1);
         }
 
         boolean waitRsp(long millis) {
@@ -153,7 +153,7 @@ public class CThostFtdcMdApiTest {
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            fail("sleep interrupted");
+            logger.severe("sleep interrupted");
             return false;
         }
     }
@@ -167,42 +167,38 @@ public class CThostFtdcMdApiTest {
         boolean[] released = new boolean[1];
         released[0] = false;
 
-        api.RegisterFront("tcp://180.168.146.187:10111");
         api.RegisterSpi(spi);
+        api.RegisterFront("tcp://180.168.146.187:10111");
         api.Init();
 
-        if (!spi.waitRsp(1000))
-            fail("connect failed");
+        int r = 0;
 
-        waitMillis(1000);
+        if (!spi.waitRsp(2000))
+            logger.severe("connect timeout");
+
+        waitMillis(2000);
 
         spi.login();
-        if (!spi.waitRsp(1000))
-            fail("login failed");
+        if (!spi.waitRsp(2000))
+            logger.severe("login timeout");
 
         spi.subscribe("c2101");
-        if (!spi.waitRsp(1000))
-            fail("sub timeout");
+        if (!spi.waitRsp(2000))
+            logger.severe("sub timeout");
 
-        waitMillis(30 * 1000);
+        waitMillis(5 * 2000);
 
         spi.unSubscribe("c2101");
-        if (!spi.waitRsp(1000))
-            fail("un-sub timeout");
+        if (!spi.waitRsp(2000))
+            logger.severe("un-sub timeout");
 
-        waitMillis(1000);
+        waitMillis(2000);
 
-        new Thread(() -> {
-            api.Join();
-            released[0] = true;
-        }).start();
-
-        api.Release();
+        spi.logout();
+        if (!spi.waitRsp(2000))
+            logger.severe("logout timeout");
 
         // Wait release.
-        waitMillis(1000);
-
-        if (!released[0])
-            fail("release time out");
+        waitMillis(100);
     }
 }

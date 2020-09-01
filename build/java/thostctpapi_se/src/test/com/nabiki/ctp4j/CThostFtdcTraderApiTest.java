@@ -54,6 +54,7 @@ public class CThostFtdcTraderApiTest {
         public void OnRspAuthenticate(CThostFtdcRspAuthenticateField pRspAuthenticateField, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("authenticate failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("authenticated");
             signal();
         }
 
@@ -61,6 +62,7 @@ public class CThostFtdcTraderApiTest {
         public void OnRspUserLogin(CThostFtdcRspUserLoginField pRspUserLogin, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("trader login");
             signal();
         }
 
@@ -68,6 +70,7 @@ public class CThostFtdcTraderApiTest {
         public void OnRspUserLogout(CThostFtdcUserLogoutField pUserLogout, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("trader logout");
             signal();
         }
 
@@ -86,6 +89,7 @@ public class CThostFtdcTraderApiTest {
         public void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField pSettlementInfoConfirm, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
                 fail("confirm settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.info("confirm settlement");
             signal();
         }
 
@@ -93,7 +97,7 @@ public class CThostFtdcTraderApiTest {
         public void OnRspError(CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo == null)
                 fail("rsp info null");
-            fail("failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+            logger.severe("failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
         }
 
@@ -177,11 +181,8 @@ public class CThostFtdcTraderApiTest {
 
     @Test
     public void basic() {
-        var api = CThostFtdcTraderApi.CreateFtdcTraderApi(".trade/");
+        var api = CThostFtdcTraderApi.CreateFtdcTraderApi("trade/");
         var spi = new TraderTestSpi(api);
-
-        boolean[] released = new boolean[1];
-        released[0] = false;
 
         api.RegisterFront("tcp://180.168.146.187:10101");
         api.RegisterSpi(spi);
@@ -214,17 +215,7 @@ public class CThostFtdcTraderApiTest {
         if (!spi.waitRsp(1000))
             fail("logout time out");
 
-        new Thread(() -> {
-            api.Join();
-            released[0] = true;
-        }).start();
-
-        api.Release();
-
         // Wait release.
         waitMillis(1000);
-
-        if (!released[0])
-            fail("release time out");
     }
 }
