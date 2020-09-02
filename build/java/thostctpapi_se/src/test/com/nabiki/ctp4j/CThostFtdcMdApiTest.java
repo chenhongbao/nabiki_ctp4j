@@ -20,11 +20,11 @@ public class CThostFtdcMdApiTest {
     class TestMdSpi extends CThostFtdcMdSpi {
         private final CThostFtdcMdApi api;
 
-        private final String brokerID = "9999";
-        private final String userID = "144287";
+        private final String brokerID = "6020";
+        private final String userID = "100912699";
         private final String password = "chb_1987_1013";
-        private final String appID = "3430491819";
-        private final String authCode = "0000000000000000";
+        private final String appID = "client_UTP_3.0.0";
+        private final String authCode = "5DE2NSQZ8122UXW6";
         private final String userProductInfo = "_trader_";
 
         private final Lock lock = new ReentrantLock();
@@ -168,7 +168,7 @@ public class CThostFtdcMdApiTest {
         released[0] = false;
 
         api.RegisterSpi(spi);
-        api.RegisterFront("tcp://180.168.146.187:10111");
+        api.RegisterFront("tcp://180.166.37.178:41215");
         api.Init();
 
         int r = 0;

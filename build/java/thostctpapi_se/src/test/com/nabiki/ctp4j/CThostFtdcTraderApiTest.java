@@ -184,7 +184,7 @@ public class CThostFtdcTraderApiTest {
         var api = CThostFtdcTraderApi.CreateFtdcTraderApi("trade/");
         var spi = new TraderTestSpi(api);
 
-        api.RegisterFront("tcp://180.168.146.187:10101");
+        api.RegisterFront("tcp://180.166.37.178:41207");
         api.RegisterSpi(spi);
         api.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESUME);
         api.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESUME);
