@@ -87,10 +87,10 @@ So Java won't garbage collect the Java SPI and its C++ counterpart stays alive.
 
 5. Parallel invocation of JNI function causes JVM error
 
-   JNI is not supposed to call function in jni.h parallely because it causes JVM corrupt. This project
-   provides port to Java so I change the generated Java codes to enforce synchronized calling.
+JNI is not supposed to call function in jni.h parallely because it causes JVM corrupt. This project
+provides port to Java so I change the generated Java codes to enforce synchronized calling.
    
-   I add synchronized clause to Api methods, on a static Object. Yes, it is sychronized now.
+I add synchronized clause to Api methods, on a static Object. Yes, it is sychronized now.
    
 Respects
 --------

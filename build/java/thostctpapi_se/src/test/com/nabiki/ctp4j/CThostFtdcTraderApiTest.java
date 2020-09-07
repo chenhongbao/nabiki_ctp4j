@@ -2,19 +2,29 @@ package com.nabiki.ctp4j;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-
-import static org.junit.Assert.fail;
+import java.util.logging.SimpleFormatter;
 
 public class CThostFtdcTraderApiTest {
 
     private static final Logger logger = Logger.getLogger(CThostFtdcTraderApiTest.class.getName());
 
     static {
+        try {
+            var fh = new FileHandler("debug.log");
+            fh.setFormatter(new SimpleFormatter());
+            logger.addHandler(fh);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.loadLibrary("thostmduserapi_se");
         System.loadLibrary("thosttraderapi_se");
         System.loadLibrary("thostctpapi_se-6.3.19-P1");
@@ -23,11 +33,11 @@ public class CThostFtdcTraderApiTest {
     private class TraderTestSpi extends CThostFtdcTraderSpi {
         private final CThostFtdcTraderApi api;
 
-        private final String brokerID = "9999";
-        private final String userID = "144287";
+        private final String brokerID = "6020";
+        private final String userID = "100912699";
         private final String password = "chb_1987_1013";
-        private final String appID = "3430491819";
-        private final String authCode = "0000000000000000";
+        private final String appID = "client_UTP_3.0.0";
+        private final String authCode = "5DE2NSQZ8122UXW6";
         private final String userProductInfo = "_trader_";
 
         private final Lock lock = new ReentrantLock();
@@ -53,7 +63,7 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspAuthenticate(CThostFtdcRspAuthenticateField pRspAuthenticateField, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("authenticate failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("authenticate failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             logger.info("authenticated");
             signal();
         }
@@ -61,7 +71,7 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspUserLogin(CThostFtdcRspUserLoginField pRspUserLogin, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("login failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             logger.info("trader login");
             signal();
         }
@@ -69,7 +79,7 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspUserLogout(CThostFtdcUserLogoutField pUserLogout, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("logout failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             logger.info("trader logout");
             signal();
         }
@@ -77,7 +87,7 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspQrySettlementInfo(CThostFtdcSettlementInfoField pSettlementInfo, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("qry settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("qry settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             else if (pSettlementInfo != null)
                 System.out.print(pSettlementInfo.getContent());
             else
@@ -88,7 +98,7 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspSettlementInfoConfirm(CThostFtdcSettlementInfoConfirmField pSettlementInfoConfirm, CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo != null && pRspInfo.getErrorID() != 0)
-                fail("confirm settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
+                logger.severe("confirm settlement failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             logger.info("confirm settlement");
             signal();
         }
@@ -96,9 +106,26 @@ public class CThostFtdcTraderApiTest {
         @Override
         public void OnRspError(CThostFtdcRspInfoField pRspInfo, int nRequestID, boolean bIsLast) {
             if (pRspInfo == null)
-                fail("rsp info null");
+                logger.severe("rsp info null");
             logger.severe("failed[" + pRspInfo.getErrorID() + "]: " + pRspInfo.getErrorMsg());
             signal();
+        }
+
+        @Override
+        public void OnRtnInstrumentStatus(CThostFtdcInstrumentStatusField pInstrumentStatus) {
+            if (pInstrumentStatus == null) {
+                logger.warning("null instrument status");
+                return;
+            }
+            String msg = pInstrumentStatus.getExchangeID() +"/"
+                    + pInstrumentStatus.getExchangeInstID() + "/"
+                    + pInstrumentStatus.getInstrumentID() + "\n";
+            msg += "Settlement group ID: " + pInstrumentStatus.getSettlementGroupID() + "\n";
+            msg += "Trading segment SB: " + pInstrumentStatus.getTradingSegmentSN() + "\n";
+            msg += "" + pInstrumentStatus.getEnterTime() + "/"
+                    + pInstrumentStatus.getEnterReason() + "/"
+                    + pInstrumentStatus.getInstrumentStatus() + "\n";
+            logger.info(msg);
         }
 
         int authenticate() {
@@ -174,7 +201,7 @@ public class CThostFtdcTraderApiTest {
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            fail("sleep interrupted");
+            logger.severe("sleep interrupted");
             return false;
         }
     }
@@ -191,29 +218,35 @@ public class CThostFtdcTraderApiTest {
         api.Init();
 
         if (!spi.waitRsp(1000))
-            fail("connect time out");
+            logger.severe("connect time out");
 
-        waitMillis(30 * 1000);
+        waitMillis(5 * 1000);
 
         spi.authenticate();
         if (!spi.waitRsp(1000))
-            fail("authenticate time out");
+            logger.severe("authenticate time out");
 
         spi.login();
         if (!spi.waitRsp(1000))
-            fail("login time out");
+            logger.severe("login time out");
 
         spi.qry_settlement();
         if (!spi.waitRsp(1000))
-            fail("qry settlement time out");
+            logger.severe("qry settlement time out");
 
         spi.confirm();
         if (!spi.waitRsp(1000))
-            fail("confirm settlement time out");
+            logger.severe("confirm settlement time out");
+
+        try {
+            new CountDownLatch(1).await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         spi.logout();
         if (!spi.waitRsp(1000))
-            fail("logout time out");
+            logger.severe("logout time out");
 
         // Wait release.
         waitMillis(1000);

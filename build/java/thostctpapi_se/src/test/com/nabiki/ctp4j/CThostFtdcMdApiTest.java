@@ -25,7 +25,7 @@ public class CThostFtdcMdApiTest {
         private final String password = "chb_1987_1013";
         private final String appID = "client_UTP_3.0.0";
         private final String authCode = "5DE2NSQZ8122UXW6";
-        private final String userProductInfo = "_trader_";
+        private final String userProductInfo = "_md_";
 
         private final Lock lock = new ReentrantLock();
         private final Condition cond = lock.newCondition();
