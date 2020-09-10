@@ -7,6 +7,18 @@ Requisites
 1. JDK 11.0.5
 2. SWIG 4.0.2
 
+Directory Specs
+---------------
+
+CTP headers are in root dir, and you should build the project in this dir.
+
+/i has swig defition. If you need to build your own version with swig, use the files in this dir.
+
+/jni has jni headers taken from %JAVA_HOME%.
+
+/lib has CTP DLLs used by JNI wrapper DLLs.
+
+
 Installation notes
 ------------------
 
